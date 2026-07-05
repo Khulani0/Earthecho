@@ -140,12 +140,12 @@ const products = (await getCollection('products')).sort(
 
 <style>
   .shop-head {
-    padding-block: var(--space-16) var(--space-6);
+    padding-block: clamp(3.5rem, 8vw, 6rem) var(--space-8);
     text-align: center;
   }
   .shop-intro {
     color: var(--text-muted);
-    max-width: 60ch;
+    max-width: 52ch;
     margin-inline: auto;
     font-size: var(--text-lg);
   }
@@ -156,8 +156,8 @@ const products = (await getCollection('products')).sort(
     justify-content: space-between;
     gap: var(--space-4);
     padding-block: var(--space-4);
-    border-bottom: 1px solid var(--border-soft);
-    margin-bottom: var(--space-8);
+    border-block: 1px solid var(--border-soft);
+    margin-bottom: var(--space-12);
   }
   .filters {
     display: flex;

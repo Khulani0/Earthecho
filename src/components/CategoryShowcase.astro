@@ -46,9 +46,8 @@ const blurb: Record<string, string> = {
             </div>
             <div class="cat-body">
               <h3 class="cat-name">{c.category}</h3>
-              <p class="cat-blurb">{blurb[c.category]}</p>
               <span class="cat-count">
-                {c.count} {c.count === 1 ? 'piece' : 'pieces'} →
+                {c.count} {c.count === 1 ? 'piece' : 'pieces'}
               </span>
             </div>
           </a>
@@ -74,44 +73,44 @@ const blurb: Record<string, string> = {
   .cat-card {
     display: flex;
     flex-direction: column;
+    color: var(--text);
+  }
+  .cat-card:hover {
+    color: var(--text);
+  }
+  .cat-media {
+    aspect-ratio: 1 / 1;
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius);
     overflow: hidden;
-    color: var(--text);
-    transition: transform 0.16s ease, box-shadow 0.16s ease;
-  }
-  .cat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-    color: var(--text);
-  }
-  .cat-media {
-    aspect-ratio: 4 / 3;
-    background: var(--color-white);
-    border-bottom: 1px solid var(--border-soft);
   }
   .cat-media :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .cat-card:hover .cat-media :global(img) {
+    transform: scale(1.045);
+  }
+  .cat-card:hover .cat-name {
+    color: var(--color-botanical);
   }
   .cat-body {
-    padding: var(--space-4);
+    padding: var(--space-4) var(--space-2) 0;
+    text-align: center;
   }
   .cat-name {
-    font-size: var(--text-lg);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-xl);
     margin: 0 0 var(--space-1);
-  }
-  .cat-blurb {
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    margin: 0 0 var(--space-3);
   }
   .cat-count {
     font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--accent);
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
   }
   @media (max-width: 900px) {
     .cat-grid {

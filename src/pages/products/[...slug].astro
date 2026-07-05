@@ -32,7 +32,7 @@ const sameCategory = all.filter(
 const others = all.filter(
   (p) => p.id !== product.id && p.data.category !== data.category,
 );
-const related = [...sameCategory, ...others].slice(0, 4);
+const related = [...sameCategory, ...others].slice(0, 3);
 
 const gallery = galleryFilenames(data.image, data.altImages);
 const canonical = new URL(`/products/${product.id}`, Astro.site).href;
