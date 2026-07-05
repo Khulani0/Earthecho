@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
+import ProductCard from '../../components/ProductCard.astro';
 import TrustBadges from '../../components/TrustBadges.astro';
 import { formatPrice } from '../../lib/format';
 import { galleryFilenames } from '../../lib/productImages';
@@ -19,6 +20,19 @@ export const getStaticPaths = (async () => {
 const { product } = Astro.props;
 const { data } = product;
 await render(product); // ensures body (if any) is processed
+
+// Related pieces: same category first, topped up with other pieces to always
+// show a full row of four.
+const all = (await getCollection('products')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const sameCategory = all.filter(
+  (p) => p.id !== product.id && p.data.category === data.category,
+);
+const others = all.filter(
+  (p) => p.id !== product.id && p.data.category !== data.category,
+);
+const related = [...sameCategory, ...others].slice(0, 4);
 
 const gallery = galleryFilenames(data.image, data.altImages);
 const canonical = new URL(`/products/${product.id}`, Astro.site).href;
@@ -146,6 +160,25 @@ const jsonLd = {
         </div>
       </div>
     </div>
+
+    <!-- Related products -->
+    {
+      related.length > 0 && (
+        <section class="related">
+          <div class="related-head">
+            <h2>You may also like</h2>
+            <a class="related-all" href={`/shop?category=${encodeURIComponent(data.category)}`}>
+              View all {data.category} →
+            </a>
+          </div>
+          <div class="related-grid">
+            {related.map((p) => (
+              <ProductCard product={p} />
+            ))}
+          </div>
+        </section>
+      )
+    }
   </div>
 </BaseLayout>
 
@@ -319,6 +352,39 @@ const jsonLd = {
     .product-layout {
       grid-template-columns: 1fr;
       gap: var(--space-8);
+    }
+  }
+
+  .related {
+    margin-top: var(--space-24);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-soft);
+  }
+  .related-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+  }
+  .related-head h2 {
+    margin: 0;
+  }
+  .related-all {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+  @media (max-width: 900px) {
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

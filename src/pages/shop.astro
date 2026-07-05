@@ -75,6 +75,27 @@ const products = (await getCollection('products')).sort(
   // Preserve original (featured) order for reset.
   const originalOrder = cards.slice();
 
+  function setActiveChip(filter: string) {
+    let matched = false;
+    chips.forEach((c) => {
+      const on = c.dataset.filter === filter;
+      c.classList.toggle('is-active', on);
+      if (on) matched = true;
+    });
+    if (!matched) {
+      // Unknown category → fall back to "All".
+      chips.forEach((c) => c.classList.toggle('is-active', c.dataset.filter === 'all'));
+      activeFilter = 'all';
+    } else {
+      activeFilter = filter;
+    }
+  }
+
+  // Deep-link support: /shop?category=Planters pre-selects that filter.
+  const params = new URLSearchParams(window.location.search);
+  const initial = params.get('category');
+  if (initial) setActiveChip(initial);
+
   function apply() {
     // Filter
     let visibleCount = 0;
@@ -101,13 +122,20 @@ const products = (await getCollection('products')).sort(
 
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
-      chips.forEach((c) => c.classList.remove('is-active'));
-      chip.classList.add('is-active');
-      activeFilter = chip.dataset.filter ?? 'all';
+      const filter = chip.dataset.filter ?? 'all';
+      setActiveChip(filter);
+      // Keep the URL shareable/bookmarkable without a page reload.
+      const url = new URL(window.location.href);
+      if (filter === 'all') url.searchParams.delete('category');
+      else url.searchParams.set('category', filter);
+      history.replaceState({}, '', url);
       apply();
     });
   });
   sortSelect?.addEventListener('change', apply);
+
+  // Reflect the initial deep-linked filter.
+  apply();
 </script>
 
 <style>

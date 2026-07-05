@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrustBadges from '../components/TrustBadges.astro';
 import ProductCard from '../components/ProductCard.astro';
+import CategoryShowcase from '../components/CategoryShowcase.astro';
 import { business, contacts, whatsappLink } from '../config';
 
 const all = await getCollection('products');
@@ -33,8 +34,11 @@ const featured = all
     </div>
   </section>
 
-  <!-- Featured (placeholder until Phase 1 seeds the catalogue) -->
-  <section class="section">
+  <!-- Shop by category -->
+  <CategoryShowcase />
+
+  <!-- Featured products -->
+  <section class="section featured-section">
     <div class="container">
       <h2 class="section-title">Featured pieces</h2>
       <div class="product-grid">

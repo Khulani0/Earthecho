@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import ProductImage from './ProductImage.astro';
+import { resolveProductImage } from '../lib/productImages';
+import { productCategories } from '../config';
+
+const products = await getCollection('products');
+
+// Build a card per category: count + a representative photo. Prefer the first
+// in-category product whose image file actually exists (so category thumbnails
+// never show a "photo coming soon" tile), falling back to the first product.
+const cards = productCategories.map((category) => {
+  const inCat = products
+    .filter((p) => p.data.category === category)
+    .sort((a, b) => a.data.order - b.data.order);
+  const rep =
+    inCat.find((p) => resolveProductImage(p.data.image)) ?? inCat[0];
+  return {
+    category,
+    count: inCat.length,
+    image: rep?.data.image ?? '',
+    href: `/shop?category=${encodeURIComponent(category)}`,
+  };
+});
+
+const blurb: Record<string, string> = {
+  Statement: 'Bold, tall pieces that anchor a space',
+  Planters: 'Everyday classics in every shape',
+  'Bowls & Trays': 'Low bowls and trays for arrangements',
+  'Garden Features': 'Sculptural bird baths and faces',
+};
+---
+
+<section class="section cat-showcase">
+  <div class="container">
+    <div class="cat-head">
+      <p class="eyebrow">Browse</p>
+      <h2>Shop by category</h2>
+    </div>
+    <div class="cat-grid">
+      {
+        cards.map((c) => (
+          <a class="cat-card" href={c.href}>
+            <div class="cat-media">
+              <ProductImage filename={c.image} alt={`${c.category} planters`} width={500} />
+            </div>
+            <div class="cat-body">
+              <h3 class="cat-name">{c.category}</h3>
+              <p class="cat-blurb">{blurb[c.category]}</p>
+              <span class="cat-count">
+                {c.count} {c.count === 1 ? 'piece' : 'pieces'} →
+              </span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .cat-head {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+  .cat-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: var(--text);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    color: var(--text);
+  }
+  .cat-media {
+    aspect-ratio: 4 / 3;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .cat-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cat-body {
+    padding: var(--space-4);
+  }
+  .cat-name {
+    font-size: var(--text-lg);
+    margin: 0 0 var(--space-1);
+  }
+  .cat-blurb {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0 0 var(--space-3);
+  }
+  .cat-count {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent);
+  }
+  @media (max-width: 900px) {
+    .cat-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 460px) {
+    .cat-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
