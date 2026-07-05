@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import { business } from '../config';
+---
+
+<BaseLayout
+  title="About"
+  description="Earthecho Designs handcrafts durable cement planters and garden features in Ottery, Cape Town."
+>
+  <section class="section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Our story</p>
+      <h1>Handcrafted in {business.location}</h1>
+      <p>
+        Earthecho Designs is a small Cape Town studio making cement planters and
+        garden features by hand. This page will carry the full story, the team
+        and our workshop details — arriving in a later build phase.
+      </p>
+      <TrustBadges />
+    </div>
+  </section>
+</BaseLayout>

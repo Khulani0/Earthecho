@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import { business, contacts, whatsappLink } from '../config';
+---
+
+<BaseLayout title={business.name} description={business.framing}>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">Handcrafted in Cape Town</p>
+      <h1>{business.tagline}</h1>
+      <p class="hero-framing">{business.framing}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/shop">Shop the collection</a>
+        <a class="btn btn-outline" href={whatsappLink()}>Order on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust badges -->
+  <section class="section trust-section">
+    <div class="container">
+      <TrustBadges />
+    </div>
+  </section>
+
+  <!-- Featured (placeholder until Phase 1 seeds the catalogue) -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Featured pieces</h2>
+      <div class="featured-placeholder">
+        <p>
+          The full 22-piece collection is being prepared. Product photos and
+          pricing arrive in the next build phase.
+        </p>
+        <a class="btn btn-outline" href="/shop">Browse the shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="section story">
+    <div class="container container-narrow story-inner">
+      <p class="eyebrow">Our craft</p>
+      <h2>Handcrafted, one piece at a time</h2>
+      <p>
+        Every Earthecho planter and garden feature is cast by hand in {
+          business.location
+        }. We work in durable cement built for South African weather — pieces
+        made to live indoors or out, with drainage holes included and no two
+        exactly alike.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={whatsappLink()}>WhatsApp us</a>
+        <a
+          class="btn btn-outline"
+          href={`tel:+${contacts.whatsappNumber}`}>Call {contacts.ordersPhoneDisplay}</a
+        >
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background:
+      radial-gradient(
+        120% 120% at 80% -10%,
+        color-mix(in srgb, var(--color-stone) 35%, transparent),
+        transparent 60%
+      ),
+      var(--color-paper);
+    padding-block: var(--space-24) var(--space-16);
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 760px;
+  }
+  .hero-framing {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    max-width: 620px;
+    margin-inline: auto;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+    margin-top: var(--space-8);
+  }
+  .trust-section {
+    padding-block: var(--space-8);
+    border-block: 1px solid var(--border-soft);
+    background: var(--surface);
+  }
+  .section-title {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  .featured-placeholder {
+    text-align: center;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-16) var(--space-6);
+    color: var(--text-muted);
+  }
+  .featured-placeholder .btn {
+    margin-top: var(--space-4);
+  }
+  .story {
+    background: var(--surface);
+  }
+  .story-inner {
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../config';
+---
+
+<BaseLayout
+  title="Privacy"
+  description="How Earthecho Designs handles your personal information under POPIA."
+>
+  <section class="section">
+    <div class="container container-narrow prose">
+      <h1>Privacy notice</h1>
+      <p>
+        {business.name} respects your privacy. In line with South Africa's
+        Protection of Personal Information Act (POPIA), we collect only the
+        information needed to fulfil an order — your name, contact number, and a
+        delivery address if you choose delivery.
+      </p>
+      <p>
+        Orders are sent to us over WhatsApp. We do not run third-party trackers
+        or advertising cookies on this site. We do not sell or share your
+        information. The full, finalised notice will be published in a later
+        build phase.
+      </p>
+      <p>
+        Questions? Email
+        <a href={`mailto:${business.email}`}>{business.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p {
+    max-width: 65ch;
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+import { business, contacts, whatsappLink } from '../config';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <span class="footer-name">{business.name}</span>
+      <p class="footer-tagline">{business.tagline}</p>
+      <p class="footer-reg">Reg. {business.registration}</p>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Visit &amp; Contact</h4>
+      <p>{business.location}</p>
+      <p>
+        <a href={`mailto:${business.email}`}>{business.email}</a>
+      </p>
+      <p>
+        {contacts.ordersName}: {contacts.ordersPhoneDisplay}<br />
+        {contacts.productionName}: {contacts.productionPhoneDisplay}
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Explore</h4>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/shop">Shop</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href={business.googleBusinessUrl}>Google Business Profile</a>
+      </nav>
+      <a class="btn btn-outline footer-wa" href={whatsappLink()}>
+        Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <p>
+        © {year} {business.name}. Handcrafted in {business.location}. Prices in
+        ZAR; no VAT charged.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-24);
+    background: var(--color-botanical);
+    color: color-mix(in srgb, var(--color-white) 88%, transparent);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-8);
+    padding-block: var(--space-16) var(--space-8);
+  }
+  .footer-name {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--color-white);
+  }
+  .footer-tagline {
+    font-style: italic;
+    margin-top: var(--space-2);
+  }
+  .footer-reg {
+    font-size: var(--text-sm);
+    opacity: 0.7;
+  }
+  .footer-heading {
+    color: var(--color-white);
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-3);
+  }
+  .footer-col p {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-sm);
+  }
+  .site-footer a {
+    color: color-mix(in srgb, var(--color-white) 88%, transparent);
+  }
+  .site-footer a:hover {
+    color: var(--color-white);
+  }
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  .footer-wa {
+    margin-top: var(--space-4);
+    color: var(--color-white);
+    border-color: color-mix(in srgb, var(--color-white) 40%, transparent);
+  }
+  .footer-wa:hover {
+    background: var(--color-white);
+    color: var(--color-botanical);
+  }
+  .footer-bottom {
+    border-top: 1px solid color-mix(in srgb, var(--color-white) 15%, transparent);
+    padding-block: var(--space-6);
+    font-size: var(--text-sm);
+    opacity: 0.8;
+  }
+  .footer-bottom p {
+    margin: 0;
+  }
+  @media (max-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

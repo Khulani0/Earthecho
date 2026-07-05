@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../config';
+---
+
+<BaseLayout
+  title="Terms"
+  description="Simple terms of sale for Earthecho Designs."
+>
+  <section class="section">
+    <div class="container container-narrow prose">
+      <h1>Terms</h1>
+      <p>
+        Prices are in South African Rand (ZAR). No VAT is charged. Because each
+        piece is handcrafted cement, slight variations in colour and finish are
+        natural and part of the character.
+      </p>
+      <p>
+        Orders are confirmed over WhatsApp, where we arrange delivery or
+        collection and payment. The full terms of sale will be finalised in a
+        later build phase.
+      </p>
+      <p>
+        Questions? Email
+        <a href={`mailto:${business.email}`}>{business.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p {
+    max-width: 65ch;
+  }
+</style>

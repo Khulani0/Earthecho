@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business, contacts, whatsappLink } from '../config';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Earthecho Designs in Ottery, Cape Town — WhatsApp, call or email."
+>
+  <section class="section">
+    <div class="container container-narrow">
+      <h1>Contact us</h1>
+      <p>We'd love to help you find the right piece.</p>
+      <ul class="contact-list">
+        <li><strong>Location:</strong> {business.location}</li>
+        <li>
+          <strong>Orders / WhatsApp:</strong> {contacts.ordersName} —
+          {contacts.ordersPhoneDisplay}
+        </li>
+        <li>
+          <strong>Production:</strong> {contacts.productionName} —
+          {contacts.productionPhoneDisplay}
+        </li>
+        <li>
+          <strong>Email:</strong>
+          <a href={`mailto:${business.email}`}>{business.email}</a>
+        </li>
+      </ul>
+      <a class="btn btn-primary" href={whatsappLink()}>Chat on WhatsApp</a>
+      <p class="note">
+        The enquiry form and Google Map of Ottery arrive in a later build phase.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-6) 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .note {
+    margin-top: var(--space-6);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

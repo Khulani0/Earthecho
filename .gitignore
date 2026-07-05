@@ -1,0 +1,23 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# generated types
+.astro/
+
+# environment / secrets — never commit real EFT or keys
+.env
+.env.production
+.env.local
+*.local
+
+# vercel
+.vercel/
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log

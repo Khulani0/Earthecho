@@ -1,0 +1,37 @@
+---
+import { trustBadges } from '../config';
+---
+
+<ul class="trust-badges" aria-label="Why buy from Earthecho">
+  {
+    trustBadges.map((badge) => (
+      <li class="trust-badge">
+        <span class="dot" aria-hidden="true">◈</span>
+        {badge}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .trust-badges {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3) var(--space-6);
+  }
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  .dot {
+    color: var(--accent);
+  }
+</style>
