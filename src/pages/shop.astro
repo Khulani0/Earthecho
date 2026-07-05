@@ -200,11 +200,6 @@ const products = (await getCollection('products')).sort(
     background: var(--surface);
     color: var(--text);
   }
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: var(--space-6);
-  }
   .no-results {
     text-align: center;
     color: var(--text-muted);

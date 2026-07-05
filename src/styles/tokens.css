@@ -15,12 +15,13 @@
   --color-white: #ffffff;
 
   /* --- Semantic --- */
-  --bg: var(--color-paper);
-  --surface: var(--color-white);
+  --bg: #ffffff; /* clean, all-white canvas */
+  --surface: #ffffff;
+  --surface-subtle: #faf9f6; /* barely-there warm tint for rare bands */
   --text: var(--color-charcoal);
-  --text-muted: #5b5f57;
-  --border: var(--color-stone);
-  --border-soft: var(--color-stone-light);
+  --text-muted: #6b6f66;
+  --border: #e4e2db;
+  --border-soft: #eeece7;
   --primary: var(--color-botanical);
   --primary-hover: var(--color-botanical-dark);
   --accent: var(--color-terracotta);
@@ -132,6 +133,24 @@ img {
 
 .section {
   padding-block: var(--space-16);
+}
+
+/* Shared responsive product grid — one system across shop, home, related. */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6) var(--space-4);
+}
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8) var(--space-6);
+  }
+}
+@media (min-width: 1000px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .btn {

@@ -171,7 +171,7 @@ const jsonLd = {
               View all {data.category} →
             </a>
           </div>
-          <div class="related-grid">
+          <div class="product-grid">
             {related.map((p) => (
               <ProductCard product={p} />
             ))}
@@ -376,15 +376,5 @@ const jsonLd = {
     font-size: var(--text-sm);
     color: var(--accent);
     white-space: nowrap;
-  }
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-6);
-  }
-  @media (max-width: 900px) {
-    .related-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 </style>
