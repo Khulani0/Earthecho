@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import { resolveProductImage } from '../lib/productImages';
+
+interface Props {
+  filename: string;
+  alt: string;
+  /** Rendered width the browser should target (px). */
+  width?: number;
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+  class?: string;
+}
+
+const {
+  filename,
+  alt,
+  width = 600,
+  sizes = '(max-width: 600px) 100vw, 400px',
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+const asset = resolveProductImage(filename);
+---
+
+{
+  asset ? (
+    <Image
+      src={asset}
+      alt={alt}
+      width={width}
+      height={width}
+      sizes={sizes}
+      loading={loading}
+      class={className}
+    />
+  ) : (
+    <div
+      class:list={['photo-pending', className]}
+      role="img"
+      aria-label={`${alt} — photo coming soon`}
+    >
+      <span class="pending-mark" aria-hidden="true">◈</span>
+      <span class="pending-text">Photo coming soon</span>
+    </div>
+  )
+}
+
+<style>
+  .photo-pending {
+    display: grid;
+    place-content: center;
+    gap: var(--space-2);
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-stone) 22%, var(--color-white)),
+      var(--color-white)
+    );
+    border: 1px dashed var(--border);
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .pending-mark {
+    font-size: 1.6rem;
+    color: var(--color-stone);
+  }
+  .pending-text {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+</style>

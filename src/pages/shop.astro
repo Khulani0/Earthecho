@@ -1,27 +1,185 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { productCategories } from '../config';
+
+const products = (await getCollection('products')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 ---
 
 <BaseLayout
   title="Shop"
-  description="Browse handcrafted cement planters and garden features by Earthecho Designs."
+  description="Browse the full collection of handcrafted cement planters, bowls and garden features by Earthecho Designs. Locally made in Cape Town."
 >
-  <section class="section">
+  <section class="shop-head">
     <div class="container">
-      <h1>Shop</h1>
-      <p class="lead">
-        The full collection is being loaded in the next build phase. Soon you'll
-        browse all 22 handcrafted pieces here, filter by category and sort by
-        price.
+      <p class="eyebrow">The collection</p>
+      <h1>Shop all pieces</h1>
+      <p class="shop-intro">
+        {products.length} handcrafted cement designs — each cast by hand in Cape
+        Town, drainage holes included, made for indoors or out.
       </p>
     </div>
   </section>
+
+  <div class="container">
+    <div class="shop-toolbar">
+      <div class="filters" role="group" aria-label="Filter by category">
+        <button class="chip is-active" data-filter="all">All</button>
+        {
+          productCategories.map((cat) => (
+            <button class="chip" data-filter={cat}>
+              {cat}
+            </button>
+          ))
+        }
+      </div>
+      <label class="sort">
+        <span>Sort</span>
+        <select id="sort-select" aria-label="Sort products">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="product-grid" id="product-grid">
+      {
+        products.map((product, i) => (
+          <ProductCard product={product} loading={i < 8 ? 'eager' : 'lazy'} />
+        ))
+      }
+    </div>
+    <p class="no-results" id="no-results" hidden>
+      No pieces in this category yet.
+    </p>
+  </div>
+
+  <section class="section"></section>
 </BaseLayout>
 
+<script>
+  const grid = document.getElementById('product-grid');
+  const cards = Array.from(grid?.querySelectorAll<HTMLElement>('.card') ?? []);
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const sortSelect = document.getElementById(
+    'sort-select',
+  ) as HTMLSelectElement | null;
+  const noResults = document.getElementById('no-results');
+
+  let activeFilter = 'all';
+
+  // Preserve original (featured) order for reset.
+  const originalOrder = cards.slice();
+
+  function apply() {
+    // Filter
+    let visibleCount = 0;
+    for (const card of cards) {
+      const match =
+        activeFilter === 'all' || card.dataset.category === activeFilter;
+      card.hidden = !match;
+      if (match) visibleCount++;
+    }
+    if (noResults) noResults.hidden = visibleCount > 0;
+
+    // Sort
+    const mode = sortSelect?.value ?? 'featured';
+    let ordered = originalOrder.slice();
+    if (mode === 'price-asc' || mode === 'price-desc') {
+      ordered.sort((a, b) => {
+        const pa = Number(a.dataset.price);
+        const pb = Number(b.dataset.price);
+        return mode === 'price-asc' ? pa - pb : pb - pa;
+      });
+    }
+    for (const card of ordered) grid?.appendChild(card);
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      activeFilter = chip.dataset.filter ?? 'all';
+      apply();
+    });
+  });
+  sortSelect?.addEventListener('change', apply);
+</script>
+
 <style>
-  .lead {
+  .shop-head {
+    padding-block: var(--space-16) var(--space-6);
+    text-align: center;
+  }
+  .shop-intro {
     color: var(--text-muted);
     max-width: 60ch;
+    margin-inline: auto;
     font-size: var(--text-lg);
+  }
+  .shop-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: var(--space-8);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .chip {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .chip:hover {
+    border-color: var(--color-botanical);
+  }
+  .chip.is-active {
+    background: var(--color-botanical);
+    color: var(--color-white);
+    border-color: var(--color-botanical);
+  }
+  .sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  .sort select {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: var(--space-6);
+  }
+  .no-results {
+    text-align: center;
+    color: var(--text-muted);
+    padding: var(--space-12) 0;
   }
 </style>

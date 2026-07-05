@@ -1,0 +1,102 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProductImage from './ProductImage.astro';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  product: CollectionEntry<'products'>;
+  loading?: 'eager' | 'lazy';
+}
+
+const { product, loading = 'lazy' } = Astro.props;
+const { data } = product;
+---
+
+<a
+  href={`/products/${product.id}`}
+  class="card"
+  data-category={data.category}
+  data-price={data.price}
+  data-name={data.name}
+>
+  <div class="card-media">
+    <ProductImage
+      filename={data.image}
+      alt={`${data.name} — handcrafted cement ${data.category.toLowerCase()} by Earthecho Designs`}
+      loading={loading}
+    />
+    {!data.inStock && <span class="badge-oos">Sold out</span>}
+  </div>
+  <div class="card-body">
+    <span class="card-cat">{data.category}</span>
+    <h3 class="card-name">{data.name}</h3>
+    <p class="card-dims">{data.dimensions}</p>
+    <p class="card-price">{formatPrice(data.price)}</p>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: var(--text);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    color: var(--text);
+  }
+  .card-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--color-white);
+  }
+  .card-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .badge-oos {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    background: var(--color-charcoal);
+    color: var(--color-white);
+    font-size: var(--text-xs);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+  }
+  .card-body {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .card-cat {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .card-name {
+    font-size: var(--text-lg);
+    margin: 0.1rem 0 0;
+  }
+  .card-dims {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  .card-price {
+    margin: var(--space-2) 0 0;
+    font-weight: 700;
+    color: var(--color-botanical);
+    font-size: var(--text-lg);
+  }
+</style>

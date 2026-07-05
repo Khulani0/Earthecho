@@ -52,6 +52,20 @@ const path = Astro.url.pathname;
   </div>
 </header>
 
+<script>
+  import { count, onCartChange } from '../scripts/cart';
+
+  const badge = document.querySelector<HTMLElement>('[data-cart-count]');
+  function refresh() {
+    if (!badge) return;
+    const n = count();
+    badge.textContent = String(n);
+    badge.hidden = n === 0;
+  }
+  refresh();
+  onCartChange(refresh);
+</script>
+
 <style>
   .site-header {
     position: sticky;

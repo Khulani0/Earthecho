@@ -30,10 +30,46 @@ export const contacts = {
 };
 
 export const delivery = {
-  // Cape Town local delivery flat fee (ZAR). CONFIRM the exact amount with the owner.
+  // Cape Town local delivery flat fee (ZAR).
   capeTownFee: 150,
   collectionSuburb: 'Ottery, Cape Town',
 };
+
+export type DeliveryOptionId = 'collection' | 'cape-town' | 'national';
+
+export interface DeliveryOption {
+  id: DeliveryOptionId;
+  label: string;
+  /** Flat fee in ZAR, or null when the cost is quoted separately. */
+  fee: number | null;
+  note: string;
+  /** Whether this option needs a delivery address from the customer. */
+  needsAddress: boolean;
+}
+
+export const deliveryOptions: DeliveryOption[] = [
+  {
+    id: 'collection',
+    label: `Collect from ${delivery.collectionSuburb}`,
+    fee: 0,
+    note: 'Free — we arrange a pickup time with you.',
+    needsAddress: false,
+  },
+  {
+    id: 'cape-town',
+    label: 'Cape Town local delivery',
+    fee: delivery.capeTownFee,
+    note: 'Flat fee for delivery within the Cape Town area.',
+    needsAddress: true,
+  },
+  {
+    id: 'national',
+    label: 'National delivery — quote on request',
+    fee: null,
+    note: 'Cement is heavy and fragile, so we get you a courier quote before you pay. We contact you to confirm.',
+    needsAddress: true,
+  },
+];
 
 export const trustBadges = [
   'Locally Made',

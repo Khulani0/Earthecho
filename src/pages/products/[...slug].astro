@@ -1,0 +1,324 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import TrustBadges from '../../components/TrustBadges.astro';
+import { formatPrice } from '../../lib/format';
+import { galleryFilenames } from '../../lib/productImages';
+import { business, whatsappLink } from '../../config';
+
+export const getStaticPaths = (async () => {
+  const products = await getCollection('products');
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}) satisfies GetStaticPaths;
+
+const { product } = Astro.props;
+const { data } = product;
+await render(product); // ensures body (if any) is processed
+
+const gallery = galleryFilenames(data.image, data.altImages);
+const canonical = new URL(`/products/${product.id}`, Astro.site).href;
+
+const waMessage = `Hi Earthecho, I'd like to order:\n• ${data.name} (${data.code}) — ${formatPrice(
+  data.price,
+)}\nDimensions: ${data.dimensions}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: data.name,
+  description: data.description,
+  sku: data.code,
+  category: data.category,
+  brand: { '@type': 'Brand', name: business.name },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'ZAR',
+    price: data.price,
+    availability: data.inStock
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
+    url: canonical,
+  },
+};
+---
+
+<BaseLayout title={data.name} description={data.description}>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <div class="container product-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/shop">Shop</a> <span aria-hidden="true">/</span>
+      <span>{data.name}</span>
+    </nav>
+
+    <div class="product-layout">
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery-main" id="gallery-main">
+          <ProductImage
+            filename={gallery[0]}
+            alt={`${data.name} — handcrafted cement ${data.category.toLowerCase()} by Earthecho Designs`}
+            width={800}
+            sizes="(max-width: 900px) 100vw, 560px"
+            loading="eager"
+          />
+        </div>
+        {
+          gallery.length > 1 && (
+            <div class="thumbs" role="group" aria-label="More views">
+              {gallery.map((file, i) => (
+                <button
+                  class:list={['thumb', { 'is-active': i === 0 }]}
+                  data-index={i}
+                  aria-label={`View ${i + 1}`}
+                >
+                  <ProductImage
+                    filename={file}
+                    alt={`${data.name} view ${i + 1}`}
+                    width={160}
+                    sizes="80px"
+                  />
+                </button>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Details -->
+      <div class="details">
+        <span class="detail-cat">{data.category}</span>
+        <h1>{data.name}</h1>
+        <p class="price">{formatPrice(data.price)}</p>
+        <p class="dims"><strong>Dimensions:</strong> {data.dimensions}</p>
+        <p class="desc">{data.description}</p>
+        <p class="note">
+          ◈ Handcrafted cement · drainage holes included · suitable indoors &amp;
+          out. Slight variation between casts is natural.
+        </p>
+
+        {
+          !data.inStock && (
+            <p class="oos-note">
+              This piece is currently sold out — message us to enquire about the
+              next batch.
+            </p>
+          )
+        }
+
+        <div class="qty-row">
+          <label for="qty">Quantity</label>
+          <input id="qty" type="number" min="1" value="1" inputmode="numeric" />
+        </div>
+
+        <div class="cta-row">
+          <button
+            class="btn btn-primary add-to-cart"
+            data-code={data.code}
+            data-name={data.name}
+            data-price={data.price}
+            data-image={data.image}
+            disabled={!data.inStock}
+          >
+            Add to cart
+          </button>
+          <a
+            class="btn btn-outline"
+            href={whatsappLink(waMessage)}
+            target="_blank"
+            rel="noopener"
+          >
+            Order on WhatsApp
+          </a>
+        </div>
+
+        <div class="badges-wrap">
+          <TrustBadges />
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { addItem } from '../../scripts/cart';
+
+  // Add to cart
+  const addBtn = document.querySelector<HTMLButtonElement>('.add-to-cart');
+  const qtyInput = document.getElementById('qty') as HTMLInputElement | null;
+  addBtn?.addEventListener('click', () => {
+    const qty = Math.max(1, Number(qtyInput?.value) || 1);
+    addItem(
+      {
+        code: addBtn.dataset.code ?? '',
+        name: addBtn.dataset.name ?? '',
+        price: Number(addBtn.dataset.price) || 0,
+        image: addBtn.dataset.image ?? '',
+      },
+      qty,
+    );
+    const original = addBtn.textContent;
+    addBtn.textContent = '✓ Added to cart';
+    addBtn.classList.add('added');
+    setTimeout(() => {
+      addBtn.textContent = original;
+      addBtn.classList.remove('added');
+    }, 1600);
+  });
+
+  // Gallery thumbnail switching (clones the chosen thumb image into the main stage).
+  const main = document.getElementById('gallery-main');
+  const thumbs = document.querySelectorAll<HTMLButtonElement>('.thumb');
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      const img = thumb.querySelector('img, .photo-pending');
+      if (!img || !main) return;
+      thumbs.forEach((t) => t.classList.remove('is-active'));
+      thumb.classList.add('is-active');
+      const clone = img.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('width');
+      clone.removeAttribute('height');
+      main.replaceChildren(clone);
+    });
+  });
+</script>
+
+<style>
+  .product-page {
+    padding-block: var(--space-8) var(--space-16);
+  }
+  .crumbs {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-6);
+  }
+  .crumbs span {
+    margin-inline: 0.25rem;
+  }
+  .product-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .gallery-main {
+    background: var(--color-white);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+  }
+  .gallery-main :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .thumbs {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .thumb {
+    width: 74px;
+    height: 74px;
+    padding: 0;
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--color-white);
+    cursor: pointer;
+  }
+  .thumb.is-active {
+    border-color: var(--color-botanical);
+  }
+  .thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .detail-cat {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .details h1 {
+    margin: var(--space-2) 0 var(--space-3);
+  }
+  .price {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-botanical);
+    margin: 0 0 var(--space-4);
+  }
+  .dims {
+    margin-bottom: var(--space-4);
+  }
+  .desc {
+    color: var(--text);
+    max-width: 52ch;
+  }
+  .note {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    background: var(--color-paper);
+    border-left: 3px solid var(--color-stone);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+  }
+  .oos-note {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 var(--space-4);
+  }
+  .qty-row input {
+    width: 72px;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    text-align: center;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .add-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .add-to-cart.added {
+    background: var(--accent);
+  }
+  .badges-wrap {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-soft);
+  }
+  .badges-wrap :global(.trust-badges) {
+    justify-content: flex-start;
+  }
+  @media (max-width: 860px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

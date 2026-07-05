@@ -1,7 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrustBadges from '../components/TrustBadges.astro';
+import ProductCard from '../components/ProductCard.astro';
 import { business, contacts, whatsappLink } from '../config';
+
+const all = await getCollection('products');
+const featured = all
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4);
 ---
 
 <BaseLayout title={business.name} description={business.framing}>
@@ -29,12 +37,11 @@ import { business, contacts, whatsappLink } from '../config';
   <section class="section">
     <div class="container">
       <h2 class="section-title">Featured pieces</h2>
-      <div class="featured-placeholder">
-        <p>
-          The full 22-piece collection is being prepared. Product photos and
-          pricing arrive in the next build phase.
-        </p>
-        <a class="btn btn-outline" href="/shop">Browse the shop</a>
+      <div class="product-grid">
+        {featured.map((product) => <ProductCard product={product} loading="eager" />)}
+      </div>
+      <div class="featured-cta">
+        <a class="btn btn-outline" href="/shop">View the full collection</a>
       </div>
     </div>
   </section>
@@ -99,16 +106,14 @@ import { business, contacts, whatsappLink } from '../config';
     text-align: center;
     margin-bottom: var(--space-8);
   }
-  .featured-placeholder {
-    text-align: center;
-    background: var(--surface);
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    padding: var(--space-16) var(--space-6);
-    color: var(--text-muted);
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: var(--space-6);
   }
-  .featured-placeholder .btn {
-    margin-top: var(--space-4);
+  .featured-cta {
+    text-align: center;
+    margin-top: var(--space-8);
   }
   .story {
     background: var(--surface);
