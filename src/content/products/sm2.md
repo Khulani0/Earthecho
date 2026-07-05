@@ -4,11 +4,10 @@ name: "Tall Slim Planter"
 category: "Statement"
 dimensions: "34 × 60 cm"
 price: 549
-description: "A slender, upright planter that brings height to tight corners and doorways without crowding the space. Handcrafted in durable cement and finished for indoor or outdoor life, with drainage holes included."
+description: "A tall barrel-form planter banded with a delicate floral relief and a soft whitewashed finish. Handcrafted in weather-resistant cement for indoor or outdoor life, with drainage holes included."
 image: "sm2.png"
-altImages:
-  - "sm2-alt.png"
+altImages: []
 inStock: true
-featured: true
+featured: false
 order: 2
 ---

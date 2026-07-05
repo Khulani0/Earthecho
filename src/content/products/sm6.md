@@ -4,10 +4,10 @@ name: "Bird Bath"
 category: "Garden Features"
 dimensions: "40 × 56 cm"
 price: 499
-description: "A handcrafted cement bird bath that invites life into the garden. Its sturdy form stands up to South African weather year-round, and the natural cement finish settles gracefully into any outdoor setting."
+description: "A classic pedestal bird bath with a fluted bowl and column, finished in soft whitewashed cement. Sturdy enough for South African weather year-round and a graceful focal point in any garden."
 image: "sm6.png"
 altImages: []
 inStock: true
-featured: false
-order: 5
+featured: true
+order: 6
 ---

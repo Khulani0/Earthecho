@@ -1,15 +1,13 @@
 ---
 code: "SM3"
-name: "Decorative Medium Planter"
+name: "Butterfly Medium Planter"
 category: "Planters"
 dimensions: "37 × 33 cm"
 price: 399
-description: "A versatile medium planter with a decorative hand-finished surface, at home on a stoep, shelf or garden bed. Cast by hand in weather-resistant cement for indoor or outdoor use, with drainage holes included. No two are exactly alike."
+description: "A decorative medium planter with a raised butterfly motif and a beautifully textured surface. Cast by hand in durable cement for indoor or outdoor use, with drainage holes included. No two are exactly alike."
 image: "sm3.png"
-altImages:
-  - "sm3-alt.png"
-  - "sm4.png"
+altImages: []
 inStock: true
-featured: false
+featured: true
 order: 3
 ---

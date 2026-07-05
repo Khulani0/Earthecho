@@ -4,10 +4,10 @@ name: "Window Box Planter"
 category: "Planters"
 dimensions: "86 × 32 × 26 cm"
 price: 499
-description: "A long, generous trough for herbs, succulents or trailing greenery along a wall, sill or balcony edge. Handcrafted in durable cement for indoor or outdoor use, with drainage holes included."
+description: "A long trough planter detailed with flower and butterfly reliefs — perfect for herbs, succulents or trailing greenery along a wall or balcony. Handcrafted in durable cement for indoor or outdoor use, with drainage holes included."
 image: "sm8.png"
 altImages: []
 inStock: true
 featured: false
-order: 6
+order: 8
 ---
