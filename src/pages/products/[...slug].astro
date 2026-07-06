@@ -6,7 +6,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import TrustBadges from '../../components/TrustBadges.astro';
 import { formatPrice } from '../../lib/format';
-import { galleryFilenames } from '../../lib/productImages';
+import { galleryFilenames, resolveProductImage } from '../../lib/productImages';
 import { business, whatsappLink } from '../../config';
 
 export const getStaticPaths = (async () => {
@@ -36,6 +36,8 @@ const related = [...sameCategory, ...others].slice(0, 3);
 
 const gallery = galleryFilenames(data.image, data.altImages);
 const canonical = new URL(`/products/${product.id}`, Astro.site).href;
+const primaryAsset = resolveProductImage(data.image);
+const ogImage = primaryAsset?.src ?? '/og-default.jpg';
 
 const waMessage = `Hi Earthecho, I'd like to order:\n• ${data.name} (${data.code}) — ${formatPrice(
   data.price,
@@ -61,7 +63,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout title={data.name} description={data.description}>
+<BaseLayout title={data.name} description={data.description} ogImage={ogImage}>
   <script
     type="application/ld+json"
     slot="head"

@@ -1,0 +1,72 @@
+---
+// A light, honest notice. Earthecho uses only essential local storage (your
+// cart) and no third-party tracking cookies, so this informs rather than asks
+// for consent. Dismissal is remembered in localStorage.
+---
+
+<div class="cookie-notice" id="cookie-notice" hidden>
+  <p>
+    We use only essential storage to keep your cart working — no tracking or
+    advertising cookies. <a href="/privacy">Learn more</a>.
+  </p>
+  <button type="button" id="cookie-ok" class="cookie-ok">Got it</button>
+</div>
+
+<script>
+  const KEY = 'earthecho_cookie_ack_v1';
+  const el = document.getElementById('cookie-notice')!;
+  const btn = document.getElementById('cookie-ok')!;
+  if (!localStorage.getItem(KEY)) el.hidden = false;
+  btn.addEventListener('click', () => {
+    localStorage.setItem(KEY, '1');
+    el.hidden = true;
+  });
+</script>
+
+<style>
+  .cookie-notice {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    z-index: 70;
+    width: min(680px, calc(100% - 32px));
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-charcoal);
+    color: #fff;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    font-size: var(--text-sm);
+  }
+  .cookie-notice[hidden] {
+    display: none;
+  }
+  .cookie-notice p {
+    margin: 0;
+    flex: 1;
+  }
+  .cookie-notice a {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .cookie-ok {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  @media (max-width: 520px) {
+    .cookie-notice {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+  }
+</style>

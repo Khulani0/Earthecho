@@ -1,0 +1,129 @@
+# ------------------------------------------------------------------
+# Earthecho admin (Sveltia CMS) configuration
+# Sindi manages Products and the Gallery here. On Save, the CMS commits
+# to GitHub and Vercel rebuilds — the change is live in about a minute.
+#
+# ONE-TIME SETUP by the site owner before first login (see HANDOVER.md):
+#   1. Create a GitHub OAuth App.
+#   2. Deploy the free "sveltia-cms-auth" Cloudflare Worker.
+#   3. Put the Worker URL in `base_url` below.
+# ------------------------------------------------------------------
+
+backend:
+  name: github
+  repo: Khulani0/Earthecho
+  # The branch the live site deploys from. If you later switch the site's
+  # production branch (e.g. to `main`), update this to match.
+  branch: claude/quirky-galileo-uu0vpe
+  # The GitHub OAuth relay (Cloudflare Worker). Replace with your Worker URL:
+  base_url: https://REPLACE-WITH-YOUR-AUTH-WORKER.workers.dev
+
+# Nice-to-haves
+site_url: https://earthecho.co.za
+display_url: https://earthecho.co.za
+logo_url: /favicon.svg
+
+# Default location for uploaded media (products). Gallery overrides per-field.
+media_folder: "src/assets/products"
+public_folder: "/src/assets/products"
+
+collections:
+  # ---------------- PRODUCTS ----------------
+  - name: products
+    label: Products
+    label_singular: Product
+    description: "Add or edit the pieces shown in the shop."
+    folder: src/content/products
+    create: true
+    delete: true
+    # File name comes from the product code, lower-cased (e.g. EE23 -> ee23.md)
+    slug: "{{fields.code | lower}}"
+    identifier_field: name
+    summary: "{{fields.name}} — R{{fields.price}}"
+    sortable_fields: [order, price, name]
+    fields:
+      - label: "Product code"
+        name: code
+        widget: string
+        hint: "A short UNIQUE code, e.g. EE23. Becomes the web address; don't reuse one."
+      - label: "Name"
+        name: name
+        widget: string
+      - label: "Price (R)"
+        name: price
+        widget: number
+        value_type: int
+        min: 0
+        hint: "Rand only, no cents. Example: 399"
+      - label: "Category"
+        name: category
+        widget: select
+        options: ["Statement", "Planters", "Bowls & Trays", "Garden Features"]
+      - label: "Dimensions"
+        name: dimensions
+        widget: string
+        hint: "Example: 40 × 50 cm"
+      - label: "Description"
+        name: description
+        widget: text
+        hint: "2–3 sentences. Mention it's handcrafted cement, indoor/outdoor, drainage holes."
+      - label: "Main photo"
+        name: image
+        widget: image
+        media_folder: "/src/assets/products"
+        public_folder: "/src/assets/products"
+        hint: "Use a clear photo on a plain white background."
+      - label: "More photos (optional)"
+        name: altImages
+        widget: list
+        required: false
+        summary: "{{fields.photo}}"
+        field:
+          label: Photo
+          name: photo
+          widget: image
+          media_folder: "/src/assets/products"
+          public_folder: "/src/assets/products"
+      - label: "In stock"
+        name: inStock
+        widget: boolean
+        default: true
+      - label: "Featured on homepage"
+        name: featured
+        widget: boolean
+        default: false
+      - label: "Sort order"
+        name: order
+        widget: number
+        value_type: int
+        default: 99
+        hint: "Lower numbers show first."
+
+  # ---------------- GALLERY ----------------
+  - name: gallery
+    label: Gallery
+    label_singular: Gallery photo
+    description: "Lifestyle photos of your pieces in gardens and homes."
+    folder: src/content/gallery
+    create: true
+    delete: true
+    identifier_field: caption
+    slug: "gallery-{{fields.order}}-{{slug}}"
+    summary: "{{fields.caption}}"
+    sortable_fields: [order]
+    fields:
+      - label: "Photo"
+        name: image
+        widget: image
+        media_folder: "/src/assets/gallery"
+        public_folder: "/src/assets/gallery"
+      - label: "Caption (optional)"
+        name: caption
+        widget: string
+        required: false
+        hint: "A short line describing the photo."
+      - label: "Sort order"
+        name: order
+        widget: number
+        value_type: int
+        default: 99

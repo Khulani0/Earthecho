@@ -29,4 +29,17 @@ const products = defineCollection({
   }),
 });
 
-export const collections = { products };
+/**
+ * The `gallery` — lifestyle photos of Earthecho pieces styled in gardens and
+ * homes. Managed by the owner through the CMS (image + optional caption).
+ */
+const gallery = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/gallery' }),
+  schema: z.object({
+    image: z.string(),
+    caption: z.string().default(''),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { products, gallery };

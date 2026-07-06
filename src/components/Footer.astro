@@ -27,11 +27,15 @@ const year = new Date().getFullYear();
       <h4 class="footer-heading">Explore</h4>
       <nav class="footer-nav" aria-label="Footer">
         <a href="/shop">Shop</a>
+        <a href="/gallery">Gallery</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
-        <a href={business.googleBusinessUrl}>Google Business Profile</a>
+        <a href={business.facebookUrl} target="_blank" rel="noopener">Facebook</a>
+        <a href={business.googleBusinessUrl} target="_blank" rel="noopener"
+          >Google Business Profile</a
+        >
       </nav>
       <a class="btn btn-outline footer-wa" href={whatsappLink()}>
         Chat on WhatsApp

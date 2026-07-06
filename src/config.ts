@@ -14,8 +14,12 @@ export const business = {
   registration: '2025/496004/07',
   location: 'Ottery, Cape Town',
   email: 'Earthechodesigns@outlook.com',
-  // Google Business Profile link — created after launch. Placeholder for now.
-  googleBusinessUrl: '#',
+  // Google Business Profile (from the shared Google listing).
+  googleBusinessUrl: 'https://share.google/m8AJS7MYNogJLj8gu',
+  // Facebook page.
+  facebookUrl: 'https://www.facebook.com/share/1JCQwU1tSC/',
+  // Opening hours — shown in LocalBusiness schema. Update if these change.
+  hours: 'Mon–Sat 09:00–17:00',
 };
 
 export const contacts = {

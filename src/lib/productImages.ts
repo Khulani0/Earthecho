@@ -10,7 +10,7 @@ import type { ImageMetadata } from 'astro';
  * breaking the build.
  */
 const modules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/products/*.{png,jpg,jpeg,webp,avif}',
+  '../assets/{products,gallery}/*.{png,jpg,jpeg,webp,avif}',
   { eager: true },
 );
 
@@ -20,12 +20,21 @@ for (const [path, mod] of Object.entries(modules)) {
   if (filename) byFilename.set(filename.toLowerCase(), mod.default);
 }
 
-/** Return the optimised asset for a product image filename, or undefined. */
+/** Just the file name from either a bare name or a CMS-stored path. */
+function basename(value: string): string {
+  return value.split(/[\\/]/).pop()!.toLowerCase();
+}
+
+/**
+ * Return the optimised asset for an image filename, or undefined.
+ * Accepts a bare filename ("sm1.png") or a path the CMS may store
+ * ("/src/assets/products/sm1.png").
+ */
 export function resolveProductImage(
   filename: string | undefined,
 ): ImageMetadata | undefined {
   if (!filename) return undefined;
-  return byFilename.get(filename.toLowerCase());
+  return byFilename.get(basename(filename));
 }
 
 /** All image filenames for a product (primary first), de-duplicated. */

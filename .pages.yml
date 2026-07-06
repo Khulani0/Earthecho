@@ -1,0 +1,57 @@
+# ------------------------------------------------------------------
+# Pages CMS configuration (https://pagescms.org)
+# The EASIEST editor for Sindi: no setup to deploy. She signs in at
+# app.pagescms.org with GitHub, opens this repo, and edits via forms.
+# On Save it commits here and Vercel rebuilds — live in about a minute.
+# ------------------------------------------------------------------
+
+media:
+  - name: product-media
+    label: Product photos
+    input: src/assets/products
+    output: /src/assets/products
+    extensions: [png, jpg, jpeg, webp]
+  - name: gallery-media
+    label: Gallery photos
+    input: src/assets/gallery
+    output: /src/assets/gallery
+    extensions: [png, jpg, jpeg, webp]
+
+content:
+  - name: products
+    label: Products
+    type: collection
+    path: src/content/products
+    filename: '{fields.code | lower}.md'
+    view:
+      fields: [name, category, price, order]
+      sort: [order, price, name]
+    fields:
+      - { name: code, label: Product code, type: string, description: "Short UNIQUE code, e.g. EE23. Becomes the web address." }
+      - { name: name, label: Name, type: string }
+      - { name: price, label: Price (R), type: number, description: "Rand only, no cents." }
+      - name: category
+        label: Category
+        type: select
+        options:
+          values: [Statement, Planters, "Bowls & Trays", Garden Features]
+      - { name: dimensions, label: Dimensions, type: string, description: "e.g. 40 × 50 cm" }
+      - { name: description, label: Description, type: text, description: "2–3 sentences: handcrafted cement, indoor/outdoor, drainage holes." }
+      - { name: image, label: Main photo, type: image, options: { media: product-media }, description: "Clear photo on a plain white background." }
+      - { name: altImages, label: More photos, type: image, list: true, options: { media: product-media } }
+      - { name: inStock, label: In stock, type: boolean, default: true }
+      - { name: featured, label: Featured on homepage, type: boolean, default: false }
+      - { name: order, label: Sort order, type: number, default: 99, description: "Lower shows first." }
+
+  - name: gallery
+    label: Gallery
+    type: collection
+    path: src/content/gallery
+    filename: 'gallery-{fields.order}.md'
+    view:
+      fields: [caption, order]
+      sort: [order]
+    fields:
+      - { name: image, label: Photo, type: image, options: { media: gallery-media } }
+      - { name: caption, label: Caption, type: string, required: false }
+      - { name: order, label: Sort order, type: number, default: 99 }

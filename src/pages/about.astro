@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrustBadges from '../components/TrustBadges.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
 import { business } from '../config';
 ---
 
@@ -8,6 +9,7 @@ import { business } from '../config';
   title="About"
   description="Earthecho Designs handcrafts durable cement planters and garden features in Ottery, Cape Town."
 >
+  <LocalBusinessSchema slot="head" />
   <section class="section">
     <div class="container container-narrow">
       <p class="eyebrow">Our story</p>

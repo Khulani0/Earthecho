@@ -5,7 +5,7 @@ category: "Planters"
 dimensions: "35 × 30 cm"
 price: 279
 description: "A rounded planter finished with a raised daisy-and-stem motif on a softly textured body. Made in weather-resistant cement for indoor or outdoor use, with drainage holes included."
-image: "sm9.png"
+image: "/src/assets/products/sm9.png"
 altImages: []
 inStock: true
 featured: false

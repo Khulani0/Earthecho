@@ -1,50 +1,215 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
 import { business, contacts, whatsappLink } from '../config';
+
+// Optional Formspree form (free, no server). Set PUBLIC_FORMSPREE_ID in the
+// environment to enable it; otherwise the form falls back to WhatsApp + email.
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID as string | undefined;
+const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : '';
 ---
 
 <BaseLayout
   title="Contact"
-  description="Get in touch with Earthecho Designs in Ottery, Cape Town — WhatsApp, call or email."
+  description="Get in touch with Earthecho Designs in Ottery, Cape Town — WhatsApp, call, email or send an enquiry."
 >
+  <LocalBusinessSchema slot="head" />
+
   <section class="section">
-    <div class="container container-narrow">
-      <h1>Contact us</h1>
-      <p>We'd love to help you find the right piece.</p>
-      <ul class="contact-list">
-        <li><strong>Location:</strong> {business.location}</li>
-        <li>
-          <strong>Orders / WhatsApp:</strong> {contacts.ordersName} —
-          {contacts.ordersPhoneDisplay}
-        </li>
-        <li>
-          <strong>Production:</strong> {contacts.productionName} —
-          {contacts.productionPhoneDisplay}
-        </li>
-        <li>
-          <strong>Email:</strong>
-          <a href={`mailto:${business.email}`}>{business.email}</a>
-        </li>
-      </ul>
-      <a class="btn btn-primary" href={whatsappLink()}>Chat on WhatsApp</a>
-      <p class="note">
-        The enquiry form and Google Map of Ottery arrive in a later build phase.
-      </p>
+    <div class="container contact-grid">
+      <!-- Details -->
+      <div class="contact-info">
+        <p class="eyebrow">We'd love to hear from you</p>
+        <h1>Get in touch</h1>
+        <p class="lead">
+          Questions about a piece, a custom size, or delivery? Message us on
+          WhatsApp for the quickest reply, or send an enquiry below.
+        </p>
+
+        <ul class="contact-list">
+          <li>
+            <span class="label">WhatsApp / Orders</span>
+            <a href={whatsappLink()}>{contacts.ordersName} — {contacts.ordersPhoneDisplay}</a>
+          </li>
+          <li>
+            <span class="label">Production</span>
+            <span>{contacts.productionName} — {contacts.productionPhoneDisplay}</span>
+          </li>
+          <li>
+            <span class="label">Email</span>
+            <a href={`mailto:${business.email}`}>{business.email}</a>
+          </li>
+          <li>
+            <span class="label">Find us</span>
+            <span>{business.location}</span>
+          </li>
+          <li>
+            <span class="label">Hours</span>
+            <span>{business.hours}</span>
+          </li>
+        </ul>
+
+        <div class="social">
+          <a class="btn btn-primary" href={whatsappLink()}>Chat on WhatsApp</a>
+          <a class="btn btn-outline" href={business.facebookUrl} target="_blank" rel="noopener"
+            >Facebook</a
+          >
+        </div>
+      </div>
+
+      <!-- Enquiry form -->
+      <div class="contact-form-wrap">
+        <h2>Send an enquiry</h2>
+        {
+          formAction ? (
+            <form class="enquiry" action={formAction} method="POST">
+              <label>
+                Name
+                <input type="text" name="name" required autocomplete="name" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" required autocomplete="email" />
+              </label>
+              <label>
+                Phone <span class="opt">(optional)</span>
+                <input type="tel" name="phone" autocomplete="tel" />
+              </label>
+              <label>
+                Message
+                <textarea name="message" rows="4" required />
+              </label>
+              <input type="hidden" name="_subject" value="New Earthecho enquiry" />
+              <button type="submit" class="btn btn-primary btn-block">
+                Send enquiry
+              </button>
+            </form>
+          ) : (
+            <div class="form-fallback">
+              <p>
+                The quickest way to reach us is WhatsApp or email — tap below and
+                tell us what you're after.
+              </p>
+              <a class="btn btn-primary btn-block" href={whatsappLink('Hi Earthecho, I have an enquiry:')}>
+                Enquire on WhatsApp
+              </a>
+              <a class="btn btn-outline btn-block" href={`mailto:${business.email}`}>
+                Email us
+              </a>
+            </div>
+          )
+        }
+      </div>
     </div>
+  </section>
+
+  <!-- Map -->
+  <section class="map-section">
+    <iframe
+      title="Earthecho Designs location — Ottery, Cape Town"
+      class="map"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps?q=Ottery,+Cape+Town,+South+Africa&output=embed"
+    ></iframe>
   </section>
 </BaseLayout>
 
 <style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+  .lead {
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
   .contact-list {
     list-style: none;
     padding: 0;
-    margin: var(--space-6) 0;
+    margin: var(--space-8) 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .contact-list li {
+    display: grid;
+    gap: 2px;
+  }
+  .label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .social {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .contact-form-wrap {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: var(--space-8);
+  }
+  .enquiry {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+  .enquiry label {
+    display: grid;
+    gap: var(--space-2);
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+  .opt {
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .enquiry input,
+  .enquiry textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .enquiry input:focus,
+  .enquiry textarea:focus {
+    outline: 2px solid var(--color-botanical);
+    outline-offset: 1px;
+  }
+  .form-fallback {
+    margin-top: var(--space-4);
     display: grid;
     gap: var(--space-3);
-  }
-  .note {
-    margin-top: var(--space-6);
     color: var(--text-muted);
-    font-size: var(--text-sm);
+  }
+  .btn-block {
+    display: flex;
+    width: 100%;
+  }
+  .map-section {
+    margin-top: var(--space-8);
+  }
+  .map {
+    width: 100%;
+    height: 380px;
+    border: 0;
+    display: block;
+    filter: saturate(0.9);
+  }
+  @media (max-width: 820px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
   }
 </style>
