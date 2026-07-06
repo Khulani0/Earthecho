@@ -69,6 +69,13 @@
   box-sizing: border-box;
 }
 
+/* The `hidden` attribute must always win, even over component display rules
+   (e.g. product cards use display:flex). Without this, filtered-out items and
+   toggled UI stay visible. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
