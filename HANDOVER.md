@@ -55,7 +55,7 @@ Once done, Sindi just visits `/admin`, clicks **Sign in with GitHub**, and edits
 
 ## 4. Config values and what they do
 
-Public settings live in `src/config.ts` — WhatsApp number, Cape Town delivery fee (R150), business details, hours, Facebook & Google links.
+Public settings live in `src/config.ts` — WhatsApp number, Pretoria delivery fee (R150), business details, hours, Facebook & Google links.
 
 Private values live in **Vercel → your project → Settings → Environment Variables**:
 

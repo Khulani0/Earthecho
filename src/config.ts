@@ -10,14 +10,17 @@ export const business = {
   name: 'Earthecho Designs',
   tagline: "Bringing Nature's Designs Home",
   framing:
-    'Locally handcrafted cement garden features designed to bring natural elegance and timeless style to any indoor or outdoor space.',
+    'Locally handcrafted concrete garden features designed to bring natural elegance and timeless style to your indoor and outdoor spaces.',
   registration: '2025/496004/07',
-  location: 'Ottery, Cape Town',
+  // Exact street address TBC.
+  location: 'Pretoria',
   email: 'Earthechodesigns@outlook.com',
   // Google Business Profile (from the shared Google listing).
   googleBusinessUrl: 'https://share.google/m8AJS7MYNogJLj8gu',
   // Facebook page.
   facebookUrl: 'https://www.facebook.com/share/1JCQwU1tSC/',
+  // Instagram page.
+  instagramUrl: 'https://www.instagram.com/earthechodesigns',
   // Opening hours — shown in LocalBusiness schema. Update if these change.
   hours: 'Mon–Sat 09:00–17:00',
 };
@@ -34,9 +37,9 @@ export const contacts = {
 };
 
 export const delivery = {
-  // Cape Town local delivery flat fee (ZAR).
-  capeTownFee: 150,
-  collectionSuburb: 'Ottery, Cape Town',
+  // Local (Pretoria) delivery flat fee (ZAR).
+  localFee: 150,
+  collectionSuburb: 'Pretoria',
 };
 
 export type DeliveryOptionId = 'collection' | 'cape-town' | 'national';
@@ -61,16 +64,16 @@ export const deliveryOptions: DeliveryOption[] = [
   },
   {
     id: 'cape-town',
-    label: 'Cape Town local delivery',
-    fee: delivery.capeTownFee,
-    note: 'Flat fee for delivery within the Cape Town area.',
+    label: 'Pretoria local delivery',
+    fee: delivery.localFee,
+    note: 'Flat fee for delivery within the Pretoria area.',
     needsAddress: true,
   },
   {
     id: 'national',
     label: 'National delivery — quote on request',
     fee: null,
-    note: 'Cement is heavy and fragile, so we get you a courier quote before you pay. We contact you to confirm.',
+    note: 'Concrete is heavy and fragile, so we get you a courier quote before you pay. We contact you to confirm.',
     needsAddress: true,
   },
 ];

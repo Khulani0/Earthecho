@@ -72,7 +72,7 @@ const jsonLd = {
 
   <div class="container product-page">
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="/shop">Shop</a> <span aria-hidden="true">/</span>
+      <a href="/shop">Range</a> <span aria-hidden="true">/</span>
       <span>{data.name}</span>
     </nav>
 
@@ -82,7 +82,7 @@ const jsonLd = {
         <div class="gallery-main" id="gallery-main">
           <ProductImage
             filename={gallery[0]}
-            alt={`${data.name} — handcrafted cement ${data.category.toLowerCase()} by Earthecho Designs`}
+            alt={`${data.name} — handcrafted concrete ${data.category.toLowerCase()} by Earthecho Designs`}
             width={800}
             sizes="(max-width: 900px) 100vw, 560px"
             loading="eager"
@@ -118,7 +118,7 @@ const jsonLd = {
         <p class="dims"><strong>Dimensions:</strong> {data.dimensions}</p>
         <p class="desc">{data.description}</p>
         <p class="note">
-          ◈ Handcrafted cement · drainage holes included · suitable indoors &amp;
+          ◈ Handcrafted concrete · drainage holes included · suitable indoors &amp;
           out. Slight variation between casts is natural.
         </p>
 

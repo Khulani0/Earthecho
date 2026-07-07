@@ -11,7 +11,7 @@ const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : '';
 
 <BaseLayout
   title="Contact"
-  description="Get in touch with Earthecho Designs in Ottery, Cape Town — WhatsApp, call, email or send an enquiry."
+  description="Get in touch with Earthecho Designs in Pretoria — WhatsApp, call, email or send an enquiry."
 >
   <LocalBusinessSchema slot="head" />
 
@@ -53,6 +53,9 @@ const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : '';
           <a class="btn btn-primary" href={whatsappLink()}>Chat on WhatsApp</a>
           <a class="btn btn-outline" href={business.facebookUrl} target="_blank" rel="noopener"
             >Facebook</a
+          >
+          <a class="btn btn-outline" href={business.instagramUrl} target="_blank" rel="noopener"
+            >Instagram</a
           >
         </div>
       </div>
@@ -106,11 +109,11 @@ const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : '';
   <!-- Map -->
   <section class="map-section">
     <iframe
-      title="Earthecho Designs location — Ottery, Cape Town"
+      title="Earthecho Designs location — Pretoria"
       class="map"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps?q=Ottery,+Cape+Town,+South+Africa&output=embed"
+      src="https://www.google.com/maps?q=Pretoria,+South+Africa&output=embed"
     ></iframe>
   </section>
 </BaseLayout>

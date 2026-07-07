@@ -1,9 +1,9 @@
 ---
 import { business, contacts } from '../config';
 
-// LocalBusiness structured data — powers local SEO (Google Maps, "cement
-// planters Cape Town", the knowledge panel) and links the site to the
-// business's Facebook + Google Business Profile via sameAs.
+// LocalBusiness structured data — powers local SEO (Google Maps, "concrete
+// planters Pretoria", the knowledge panel) and links the site to the
+// business's Facebook, Instagram + Google Business Profile via sameAs.
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'HomeGoodsStore',
@@ -15,17 +15,21 @@ const schema = {
   email: business.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Ottery',
-    addressRegion: 'Western Cape',
+    addressLocality: 'Pretoria',
+    addressRegion: 'Gauteng',
     addressCountry: 'ZA',
   },
   areaServed: [
-    { '@type': 'City', name: 'Cape Town' },
+    { '@type': 'City', name: 'Pretoria' },
     { '@type': 'Country', name: 'South Africa' },
   ],
   openingHours: 'Mo-Sa 09:00-17:00',
   priceRange: 'R40–R749',
-  sameAs: [business.facebookUrl, business.googleBusinessUrl],
+  sameAs: [
+    business.facebookUrl,
+    business.instagramUrl,
+    business.googleBusinessUrl,
+  ],
 };
 ---
 

@@ -1,6 +1,6 @@
 # Earthecho Designs — Online Store
 
-Static **Astro** catalogue store for handcrafted cement planters and garden
+Static **Astro** catalogue store for handcrafted concrete planters and garden
 features. **No database, no server.** Products live as content files in this
 repo; orders go out over **WhatsApp**. Hosted on **Vercel**, auto-deploying on
 every push to GitHub.

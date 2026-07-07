@@ -8,7 +8,6 @@ const year = new Date().getFullYear();
     <div class="footer-brand">
       <span class="footer-name">{business.name}</span>
       <p class="footer-tagline">{business.tagline}</p>
-      <p class="footer-reg">Reg. {business.registration}</p>
     </div>
 
     <div class="footer-col">
@@ -26,13 +25,14 @@ const year = new Date().getFullYear();
     <div class="footer-col">
       <h4 class="footer-heading">Explore</h4>
       <nav class="footer-nav" aria-label="Footer">
-        <a href="/shop">Shop</a>
+        <a href="/shop">Range</a>
         <a href="/gallery">Gallery</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
         <a href={business.facebookUrl} target="_blank" rel="noopener">Facebook</a>
+        <a href={business.instagramUrl} target="_blank" rel="noopener">Instagram</a>
         <a href={business.googleBusinessUrl} target="_blank" rel="noopener"
           >Google Business Profile</a
         >
@@ -46,8 +46,7 @@ const year = new Date().getFullYear();
   <div class="footer-bottom">
     <div class="container">
       <p>
-        © {year} {business.name}. Handcrafted in {business.location}. Prices in
-        ZAR; no VAT charged.
+        © {year} {business.name}. Prices in ZAR; no VAT charged.
       </p>
     </div>
   </div>

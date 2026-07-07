@@ -1,23 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrustBadges from '../components/TrustBadges.astro';
-import ProductCard from '../components/ProductCard.astro';
 import CategoryShowcase from '../components/CategoryShowcase.astro';
 import { business, contacts, whatsappLink } from '../config';
-
-const all = await getCollection('products');
-const featured = all
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
 ---
 
 <BaseLayout title={business.name} description={business.framing}>
   <!-- Hero -->
   <section class="hero">
     <div class="container hero-inner">
-      <p class="eyebrow">Handcrafted in Cape Town</p>
       <h1 class="hero-title">{business.tagline}</h1>
       <p class="hero-framing">{business.framing}</p>
       <div class="hero-actions">
@@ -30,17 +21,10 @@ const featured = all
   <!-- Shop by category -->
   <CategoryShowcase />
 
-  <!-- Featured products -->
-  <section class="section">
+  <!-- View all -->
+  <section class="view-all">
     <div class="container">
-      <p class="eyebrow section-eyebrow">Selected pieces</p>
-      <h2 class="section-title">Featured</h2>
-      <div class="product-grid">
-        {featured.map((product) => <ProductCard product={product} loading="eager" />)}
-      </div>
-      <div class="featured-cta">
-        <a class="btn btn-outline" href="/shop">View all 22 pieces</a>
-      </div>
+      <a class="btn btn-outline" href="/shop">View all 22 pieces</a>
     </div>
   </section>
 
@@ -55,13 +39,11 @@ const featured = all
   <section class="section story">
     <div class="container container-narrow story-inner">
       <p class="eyebrow">Our craft</p>
-      <h2>Handcrafted, one piece at a time</h2>
+      <h2>One piece at a time for you</h2>
       <p>
-        Every Earthecho planter and garden feature is cast by hand in {
-          business.location
-        }. We work in durable cement built for South African weather — pieces
-        made to live indoors or out, with drainage holes included and no two
-        exactly alike.
+        Built from a premium concrete mix, our planters and garden features are
+        perfect for your cozy indoor and outdoor spaces — complete with built-in
+        drainage holes so your plants thrive.
       </p>
       <div class="hero-actions story-actions">
         <a class="btn btn-primary" href={whatsappLink()}>WhatsApp us</a>
@@ -115,18 +97,9 @@ const featured = all
     color: var(--color-botanical);
   }
 
-  .section-eyebrow {
-    display: block;
+  .view-all {
     text-align: center;
-  }
-  .section-title {
-    text-align: center;
-    font-weight: 400;
-    margin: var(--space-2) 0 var(--space-12);
-  }
-  .featured-cta {
-    text-align: center;
-    margin-top: var(--space-12);
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
   }
 
   .trust-strip {
