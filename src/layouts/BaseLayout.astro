@@ -23,6 +23,17 @@ const fullTitle =
   title === business.name ? title : `${title} · ${business.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(ogImage, Astro.site).href;
+
+// Optional, env-gated. Both are OFF unless set in Vercel.
+// - Google Search Console site verification (HTML-tag method).
+// - Cloudflare Web Analytics: privacy-first, COOKIELESS, no personal data —
+//   so it does not affect the "no tracking cookies" promise.
+const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION as
+  | string
+  | undefined;
+const cfAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as
+  | string
+  | undefined;
 ---
 
 <!doctype html>
@@ -36,6 +47,11 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      gscVerification && (
+        <meta name="google-site-verification" content={gscVerification} />
+      )
+    }
 
     <!-- Open Graph — good WhatsApp / Facebook link previews -->
     <meta property="og:type" content="website" />
@@ -70,5 +86,14 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
     <Footer />
     <WhatsAppFab />
     <CookieNotice />
+    {
+      cfAnalyticsToken && (
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${cfAnalyticsToken}"}`}
+        />
+      )
+    }
   </body>
 </html>
